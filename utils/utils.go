@@ -33,5 +33,8 @@ func UnderScoreCaseHelper(old string) string {
 		}
 		now += string(v)
 	}
-	return now[1:]
+	if now[0] == '_' {
+		return now[1:]
+	}
+	return now
 }
