@@ -28,10 +28,10 @@ func New(config config.Config) *Engine {
 func (e *Engine) OutGoFile() {
 	e.initDB()
 	e.generateGoModel()
-	outGoFile(e)
+	e.doOutGoFile()
 }
 
-func outGoFile(e *Engine) {
+func (e *Engine) doOutGoFile() {
 	dir, err := os.Getwd()
 	if err != nil {
 		log.Fatal(err)
