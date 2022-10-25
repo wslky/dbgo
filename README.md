@@ -5,7 +5,7 @@
 ## 安装
 
 ```bash
-go install github.com/wslky/dbgo
+go install github.com/wslky/dbgo@latest
 ```
 ## 使用
 
