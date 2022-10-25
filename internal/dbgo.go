@@ -1,12 +1,12 @@
-package dbgo
+package internal
 
 import (
 	"database/sql"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/wslky/dbgo/config"
-	"github.com/wslky/dbgo/define"
-	"github.com/wslky/dbgo/utils"
+	"github.com/wslky/dbgo/internal/config"
+	define2 "github.com/wslky/dbgo/internal/define"
+	"github.com/wslky/dbgo/internal/utils"
 	"log"
 	"os"
 	"strings"
@@ -14,21 +14,28 @@ import (
 
 type Engine struct {
 	conf      config.Config
-	tableDefs []*define.TableDefine
+	tableDefs []*define2.TableDefine
 	db        *sql.DB
 }
 
 func New(config config.Config) *Engine {
 	return &Engine{
-		tableDefs: make([]*define.TableDefine, 0),
+		tableDefs: make([]*define2.TableDefine, 0),
 		conf:      config,
 	}
 }
 
 func (e *Engine) OutGoFile() {
+	log.Println("start connect db...")
 	e.initDB()
+
+	log.Println("start generate go model...")
 	e.generateGoModel()
+
+	log.Println("start out go file...")
 	e.doOutGoFile()
+
+	log.Println("over")
 }
 
 func (e *Engine) doOutGoFile() {
@@ -56,7 +63,6 @@ func (e *Engine) doOutGoFile() {
 			log.Fatal(err)
 		}
 	}
-	log.Println("完成")
 }
 
 func (e *Engine) generateGoModel() {
@@ -93,22 +99,22 @@ func (e *Engine) loadTablesFromDB() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		table := &define.TableDefine{
+		table := &define2.TableDefine{
 			TableName: tableName,
-			Columns:   make([]*define.ColumnDefine, 0),
+			Columns:   make([]*define2.ColumnDefine, 0),
 		}
 		e.loadColumnsFromDB(table)
 	}
 }
 
-func (e *Engine) loadColumnsFromDB(table *define.TableDefine) {
+func (e *Engine) loadColumnsFromDB(table *define2.TableDefine) {
 	res, err := e.db.Query(utils.GetSql4TableDef(e.conf.DBName, table.TableName))
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	for res.Next() {
-		var column define.ColumnDefine
+		var column define2.ColumnDefine
 		err := res.Scan(&column.ColumnName, &column.DataType)
 		if err != nil {
 			log.Fatal(err)
@@ -119,7 +125,7 @@ func (e *Engine) loadColumnsFromDB(table *define.TableDefine) {
 	e.tableDefs = append(e.tableDefs, table)
 }
 
-func formatName(table *define.TableDefine, conf config.Config) *nameData {
+func formatName(table *define2.TableDefine, conf config.Config) *nameData {
 	res := &nameData{
 		jsonName:     make([]string, len(table.Columns)),
 		fileAttrName: make([]string, len(table.Columns)),

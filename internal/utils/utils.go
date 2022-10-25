@@ -10,6 +10,7 @@ func GetSql4TableDef(dbName, tableName string) string {
 		"FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = '%v' AND TABLE_NAME ='%v'", dbName, tableName)
 }
 
+// CamelCaseHelper GoStyle
 func CamelCaseHelper(old string) string {
 	now := ""
 	tmp := strings.Split(old, "_")
@@ -17,13 +18,17 @@ func CamelCaseHelper(old string) string {
 		if len(v) == 0 {
 			continue
 		}
-		c := string(v[0] - 32)
+		c := string(v[0])
+		if v[0] >= 'a' && v[0] <= 'z' {
+			c = string(v[0] - 32)
+		}
 		now += c
 		now += v[1:]
 	}
 	return now
 }
 
+// UnderScoreCaseHelper go_style
 func UnderScoreCaseHelper(old string) string {
 	now := ""
 	for _, v := range old {
@@ -37,4 +42,9 @@ func UnderScoreCaseHelper(old string) string {
 		return now[1:]
 	}
 	return now
+}
+
+// LowerCaseHelper  gostyle
+func LowerCaseHelper(old string) string {
+	return strings.ToLower(CamelCaseHelper(old))
 }
