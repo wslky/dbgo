@@ -6,6 +6,7 @@ type ColumnDefine struct {
 	Size       int
 }
 
+// GOType returns the Go type for the column.
 func (c *ColumnDefine) GOType() string {
 	switch c.DataType {
 	case "bigint":
@@ -92,6 +93,8 @@ func (c *ColumnDefine) GOType() string {
 		return "string"
 	}
 }
+
+// DBType returns the database type for the column.
 func (c *ColumnDefine) DBType() string {
 	switch c.DataType {
 	case "string":

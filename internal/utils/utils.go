@@ -5,6 +5,7 @@ import (
 	"strings"
 )
 
+// GetSql4TableDef return sql for get table info
 func GetSql4TableDef(dbName, tableName string) string {
 	return fmt.Sprintf("SELECT COLUMN_NAME AS 'ColumnName', DATA_TYPE AS 'DataType' "+
 		"FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = '%v' AND TABLE_NAME ='%v'", dbName, tableName)

@@ -26,7 +26,6 @@ func main() {
 		DBUser:           *username,
 		DBPassword:       *password,
 		DBUrl:            *url,
-		Path:             "",
 		FileNameType:     config.NameTypeMapping(*fileNameType),
 		FilePropertyType: config.CameCase,
 		JSONType:         config.NameTypeMapping(*jSONType),
